@@ -6,16 +6,21 @@ import * as cxs from 'cxs'
 import RegisterForm from './RegisterForm'
 import Logo from '../../components/logo/Logo'
 import Box from '../../components/box/Box'
+import { Link } from 'react-router-dom'
+import AuthService from '../../services/auth/auth'
 
 const logo = cxs({
     marginBottom: '10px'
 })
 
 export default class Register extends Component<any, any> {
-    constructor() {
+    history: any
+
+    constructor({ history }) {
         super()
 
         this.state = {}
+        this.history = history
 
         this.onChange = this.onChange.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
@@ -30,12 +35,12 @@ export default class Register extends Component<any, any> {
     }
 
     onSubmit() {
-        console.log('onSubmit', this.state)
+        AuthService.register(this.state).then(() => this.history.push('/'))
     }
     render() {
         return (
             <Section>
-                <Logo containerCls={logo} />
+                <Logo className={logo} />
                 <Box>
                     <Title>Register</Title>
                     <RegisterForm
@@ -45,6 +50,9 @@ export default class Register extends Component<any, any> {
                         onInvalid={this.onInvalid}
                         onSubmit={this.onSubmit}
                     />
+                    <p>
+                        Already have an account? <Link to="/login">Sign in</Link>
+                    </p>
                 </Box>
             </Section>
         )

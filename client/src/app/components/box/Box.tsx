@@ -1,33 +1,25 @@
-import { h, Component } from 'preact'
-import { Box, Container } from 'bloomer'
+import { h, FunctionalComponent } from 'preact'
+import { Box as BBox, Container } from 'bloomer'
+import { Box as BoxType } from 'bloomer/lib/elements/Box'
+import { Container as ContainerType } from 'bloomer/lib/layout/Container'
+
+import withMatchMediaProps from '../withMatchMediaProps'
+
 import * as cxs from 'cxs'
+type Props = { isDesktop: boolean } & (BoxType<HTMLElement> | ContainerType<HTMLElement>)
 
 const box = cxs({
     maxWidth: '400px',
     margin: 'auto'
 })
 
-const mq = window.matchMedia('(min-width: 769px)')
+const Box: FunctionalComponent<Props> = ({ isDesktop, children, ...props }) =>
+    isDesktop ? (
+        <BBox className={box} {...props}>
+            {children && children}
+        </BBox>
+    ) : (
+        <Container {...props}>{children && children}</Container>
+    )
 
-export default class extends Component<any, { isDesktop: boolean }> {
-    state = { isDesktop: mq.matches }
-
-    onWidthChange = () => {
-        this.setState(() => ({ isDesktop: mq.matches }))
-    }
-
-    componentDidMount() {
-        mq.addListener(this.onWidthChange)
-    }
-
-    componentDidUnmout() {
-        mq.removeListener(this.onWidthChange)
-    }
-    render({ children }) {
-        return this.state.isDesktop ? (
-            <Box className={box}>{children && children}</Box>
-        ) : (
-            <Container>{children && children}</Container>
-        )
-    }
-}
+export default withMatchMediaProps(Box)

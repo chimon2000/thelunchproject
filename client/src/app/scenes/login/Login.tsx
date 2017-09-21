@@ -5,7 +5,7 @@ import AuthService from '../../services/auth/auth'
 import { Section, Title } from 'bloomer'
 import Logo from '../../components/logo/Logo'
 import Box from '../../components/box/Box'
-
+import { Link } from 'react-router-dom'
 import * as cxs from 'cxs'
 
 const logo = cxs({
@@ -49,6 +49,7 @@ export default class Login extends Component<any, any> {
                         onInvalid={this.onInvalid}
                         onSubmit={this.onSubmit}
                     />
+                    Don't have an account yet? <Link to="/register">Sign up</Link>
                 </Box>
             </Section>
         )
