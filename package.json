@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {
     "start": "cross-env DB_HOST=localhost DB_USERNAME=postgres DB_PASSWORD=postgres DB_NAME=postgres node fuse",
-    "postinstall": "cd client && npm install",
     "devstart": "nodemon ./bun/www"
   },
   "dependencies": {
@@ -41,7 +40,7 @@
     "@types/serve-favicon": "^2.2.29",
     "compression": "^1.7.0",
     "cross-env": "^5.0.5",
-    "fuse-box": "^2.2.1",
+    "fuse-box": "^2.2.31",
     "nodemon": "^1.11.0",
     "rimraf": "^2.6.1",
     "typescript": "^2.4.2",

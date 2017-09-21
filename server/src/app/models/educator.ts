@@ -1,4 +1,4 @@
-import { IsDefined, IsBoolean } from 'class-validator'
+import { IsBoolean, IsDefined } from 'class-validator'
 
 import { User } from './user'
 
@@ -9,9 +9,7 @@ export class Educator extends User {
     @IsDefined() empathyTrainingLength: string
     @IsDefined() gradeLevel: string
 
-    @IsDefined()
-    @IsBoolean()
-    isTeamLead: boolean
+    @IsBoolean() isTeamLead: boolean = false
 
     get fullName() {
         return `${this.firstName} ${this.lastName}`

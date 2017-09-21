@@ -1,5 +1,5 @@
-import api from '../api/api'
-import { Educator } from '../../models/educator'
+import { Educator } from '../../models/educator';
+import api from '../api/api';
 
 class AuthService {
     isLoggedIn() {
@@ -7,9 +7,7 @@ class AuthService {
     }
 
     login({ email, password }) {
-        return api
-            .post('auth/token', { email, password })
-            .then(response => localStorage.setItem('token', response.data.token))
+        return api.post('auth/token', { email, password }).then(({ token }) => localStorage.setItem('token', token))
     }
 
     register(user: Educator) {

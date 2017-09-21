@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "axios": "^0.16.2",
     "bloomer": "^0.6.2",
     "cxs": "^6.0.0",
     "neoform": "^0.2.0",
@@ -14,11 +13,9 @@
     "react-router": "^4.1.2",
     "react-router-dom": "^4.1.2",
     "react-transition-group": "^2.2.0",
-    "reactstrap": "^4.8.0"
+    "wretch": "^0.1.1"
   },
-  "devDependencies": {
-    "@types/reactstrap": "^4.3.9"
-  },
+  "devDependencies": {},
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

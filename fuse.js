@@ -4,7 +4,8 @@ const express = require('express')
 var compression = require('compression')
 
 const PORT = process.env.PORT || 3030
-const isProduction = !!process.env.NODE_ENV
+
+const isProduction = process.env.NODE_ENV === 'production'
 
 const client = FuseBox.init({
     target: 'browser',

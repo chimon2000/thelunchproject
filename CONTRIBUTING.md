@@ -4,19 +4,19 @@ Thank you for your interest in contributing to thelunchproject!
 There are many ways to contribute to the project, and we have many different needs to be addressed. 
 
 ## Development Setup
-Before you begin editing the code, make sure you have [Node] and [Docker] installed
+Before you begin editing the code, make sure you have [Node], [Yarn], and [Docker] installed
 
 1. Fork/Clone the repository
-2. Install dependencies with `npm install` in the *root* and *client* directories
+2. Install dependencies with `yarn` in the *root* and *client* directories
 
 With [Docker] installed
 
 * Run `docker pull postgres`
 * Run `docker run --name tlp-db -e POSTGRES_PASSWORD=postgres -d -p 5432:5432 postgres`
 
-With [Node] installed
+With [Node] and [Yarn] installed
 
-* Run `npm install` to install the dependencies.
+* Run `yarn` to install the dependencies.
 
 ## Development
 
@@ -45,3 +45,4 @@ We gladly accept contributions via GitHub pull requests. Submit a pull request i
 
 [Node]: https://nodejs.org/en/docs/
 [Docker]: https://www.docker.com
+[Yarn]: https://yarnpkg.com/en/docs/install
