@@ -13,7 +13,7 @@
     "react-router": "^4.1.2",
     "react-router-dom": "^4.1.2",
     "react-transition-group": "^2.2.0",
-    "wretch": "^0.1.1"
+    "wretch": "^0.1.2"
   },
   "devDependencies": {},
   "scripts": {

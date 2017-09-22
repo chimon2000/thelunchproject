@@ -1,23 +1,23 @@
-import {
-    Entity,
-    Column,
-    PrimaryGeneratedColumn,
-    CreateDateColumn,
-    UpdateDateColumn,
-    TableInheritance,
-    DiscriminatorColumn
-} from 'typeorm'
+import { UserMetadata } from './user-metadata'
+import { Column, CreateDateColumn, Entity, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
 import Base from './base'
 
 @Entity()
-@TableInheritance('class-table')
-@DiscriminatorColumn({ name: 'type', type: 'text' })
 export class User extends Base {
-    @PrimaryGeneratedColumn() id: number
+    @PrimaryGeneratedColumn('uuid') id: string
     @Column() email: string
     @Column() password: string
     @CreateDateColumn() created
     @UpdateDateColumn() updated
 
-    roles: string[]
+    @OneToOne(() => UserMetadata, metadata => metadata.user, {
+        cascadeInsert: true,
+        cascadeUpdate: true,
+        cascadeRemove: true
+    })
+    metadata: UserMetadata
+
+    toJSON() {
+        return this.omit('password')
+    }
 }

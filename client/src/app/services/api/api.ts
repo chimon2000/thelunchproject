@@ -1,4 +1,4 @@
-import wretch from 'wretch/dist';
+import wretch from 'wretch/dist'
 
 const baseUrl = process.env.API_URL
 const token = localStorage.getItem('token')
@@ -9,10 +9,12 @@ const handleBadRequest = err => {
     return Promise.reject(err)
 }
 
-wretch().mixdefaults({ headers: { Authorization: token && `Bearer ${token}` } })
+const api = wretch()
+    .mixdefaults({ headers: { Authorization: token && `Bearer ${token}` } })
+    .baseUrl(baseUrl)
 
 export const post = (endpoint, body) => {
-    return wretch(`${baseUrl}/${endpoint && endpoint}`)
+    return api(`${baseUrl}/${endpoint && endpoint}`)
         .json(body)
         .post()
         .badRequest(handleBadRequest)
@@ -20,7 +22,7 @@ export const post = (endpoint, body) => {
 }
 
 export const put = (endpoint, body) => {
-    return wretch(`${baseUrl}/${endpoint && endpoint}`)
+    return api(`${baseUrl}/${endpoint && endpoint}`)
         .json(body)
         .put()
         .badRequest(handleBadRequest)
@@ -28,7 +30,7 @@ export const put = (endpoint, body) => {
 }
 
 export const get = (endpoint, query) => {
-    return wretch(`${baseUrl}/${endpoint && endpoint}`)
+    return api(`${baseUrl}/${endpoint && endpoint}`)
         .query(query)
         .get()
         .badRequest(handleBadRequest)
@@ -36,7 +38,7 @@ export const get = (endpoint, query) => {
 }
 
 export const destroy = endpoint => {
-    return wretch(`${baseUrl}/${endpoint && endpoint}`)
+    return api(`${baseUrl}/${endpoint && endpoint}`)
         .delete()
         .badRequest(handleBadRequest)
         .json()

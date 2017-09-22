@@ -1,2 +1,2 @@
 export * from './user'
-export * from './educator'
+export * from './user-metadata'

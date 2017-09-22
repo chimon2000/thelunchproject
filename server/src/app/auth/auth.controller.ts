@@ -1,7 +1,16 @@
 import { UserConflictError } from '../util/errors'
-import { JsonController, Body, Post, BadRequestError, Authorized, Get, CurrentUser } from 'routing-controllers'
+import {
+    JsonController,
+    Body,
+    Post,
+    BadRequestError,
+    Authorized,
+    Get,
+    CurrentUser,
+    UnauthorizedError
+} from 'routing-controllers'
 
-import { getToken, registerUser, registerEducator, userExists } from './auth.service'
+import { getToken, register, userExists } from './auth.service'
 import { User, Educator } from '../models'
 import { encodeToken } from '../util/jwt'
 
@@ -10,20 +19,20 @@ export default class {
     @Post('/token')
     async login(@Body() { email, password }: User) {
         const token = await getToken({ email, password })
-        if (!token) throw new BadRequestError()
+        if (!token) throw new UnauthorizedError()
 
         return { token }
     }
 
     @Post('/register/user')
     async register(@Body() user: User) {
-        const { email } = user
+        const { password, email } = user
 
         const exists = await userExists(email)
         if (exists) throw new UserConflictError()
 
-        const created = await registerUser(user)
-        if (!created) throw new BadRequestError()
+        const created = await register({ password, email })
+        if (!created) throw new BadRequestError('there was an issue creating this user')
 
         return { token: await encodeToken({ email }) }
     }
@@ -35,8 +44,8 @@ export default class {
         const exists = await userExists(email)
         if (exists) throw new UserConflictError()
 
-        const created = await registerEducator(user)
-        if (!created) throw new BadRequestError()
+        const created = await register(user)
+        if (!created) throw new BadRequestError('there was an issue creating this user')
 
         return { token: await encodeToken({ email }) }
     }
@@ -48,7 +57,7 @@ export default class {
         const exists = await userExists(email)
         if (exists) throw new UserConflictError()
 
-        const created = await registerUser(user)
+        const created = await register(user)
         if (!created) throw new BadRequestError()
 
         return { token: await encodeToken({ email }) }

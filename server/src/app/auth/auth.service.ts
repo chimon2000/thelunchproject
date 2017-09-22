@@ -1,9 +1,9 @@
+import { UserMetadata } from '../entities/user-info'
 import { getEntityManager } from 'typeorm'
 
 import { encodeToken } from '../util/jwt'
 import { hashPassword, verifyPassword } from '../util/crypto'
-import { User, Educator } from '../entities'
-import { User as UserModel } from '../models'
+import { User } from '../entities'
 import logger from '../util/logger'
 
 const getRepo = <T>(table: string) => getEntityManager().getRepository<T>(table)
@@ -14,31 +14,29 @@ export const getToken = async ({ email, password }) => {
         let user = await getRepo<User>('User').findOne({ email })
         let match = await verifyPassword(password, user.password)
 
+        logger.info('user password match', { match })
+
         return match ? await encodeToken({ email: user.email }) : undefined
     } catch (error) {
-        logger.error(error)
+        logger.error('something bad happened', error)
         return undefined
     }
 }
 
-export const registerUser = async user => {
+export const register = async (user: { password; email }) => {
+    logger.info('creating new user', { user })
+
     try {
         const repo = getRepo<User>('User')
-        user.password = await hashPassword(user.password)
-        return await repo.persist(user)
-    } catch (error) {
-        logger.error(error)
 
-        return undefined
-    }
-}
+        const { password, email, ...additionalInfo } = user
 
-export const registerEducator = async educator => {
-    try {
-        const repo = getRepo<Educator>('Educator')
+        const newUser = repo.create({ password: await hashPassword(user.password), email: user.email })
+        const metadata = getRepo<UserMetadata>('UserInfo').create({ info: { ...additionalInfo } })
 
-        educator.password = await hashPassword(educator.password)
-        return await repo.persist(educator)
+        newUser.metadata = metadata
+
+        return await repo.persist(newUser)
     } catch (error) {
         logger.error(error)
 
@@ -47,6 +45,8 @@ export const registerEducator = async educator => {
 }
 
 export const userExists = async email => {
+    logger.info('checking if user exists', { email })
+
     try {
         const repo = getRepo<User>('User')
 

@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 import { createConnection, getEntityManager } from 'typeorm'
-import { User, Educator } from './app/entities'
+import { User, UserMetadata } from './app/entities'
 import { controllers } from './app/index'
 import { createExpressServer, Action } from 'routing-controllers'
 import { decodeToken } from './app/util/jwt'
@@ -38,14 +38,12 @@ const currentUserChecker = async (action: Action) => {
         const token = getToken(action.request.headers)
         const { email } = (await decodeToken(token)) as any
         const user = await getEntityManager().findOne<User>(User, { email })
-        console.log(user.omit('password'))
-        return user.omit('password')
+
+        return user.toJSON()
     } catch (error) {
         return undefined
     }
 }
-
-const database = process.env.NODE_ENV !== 'production' ? 'postgres' : 'thelunchproject'
 
 createConnection({
     type: 'postgres',
@@ -55,7 +53,7 @@ createConnection({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     synchronize: true,
-    entities: [User, Educator]
+    entities: [User, UserMetadata]
 })
     .then(() => createApp())
     .catch(err => console.error(err))
