@@ -1,4 +1,4 @@
-import { UserMetadata } from '../entities/user-info'
+import { UserMetadata } from '../entities'
 import { getEntityManager } from 'typeorm'
 
 import { encodeToken } from '../util/jwt'
@@ -23,16 +23,20 @@ export const getToken = async ({ email, password }) => {
     }
 }
 
-export const register = async (user: { password; email }) => {
+export const register = async (user: { password; email; firstName; lastName }) => {
     logger.info('creating new user', { user })
 
     try {
         const repo = getRepo<User>('User')
 
-        const { password, email, ...additionalInfo } = user
+        const { password, email, firstName, lastName, ...additionalMetadata } = user
 
         const newUser = repo.create({ password: await hashPassword(user.password), email: user.email })
-        const metadata = getRepo<UserMetadata>('UserInfo').create({ info: { ...additionalInfo } })
+        const metadata = getRepo<UserMetadata>('UserMetadata').create({
+            firstName,
+            lastName,
+            additional: { ...additionalMetadata }
+        })
 
         newUser.metadata = metadata
 

@@ -1,3 +1,4 @@
+import { LoginUser } from '../models/login-user'
 import { UserConflictError } from '../util/errors'
 import {
     JsonController,
@@ -17,7 +18,7 @@ import { encodeToken } from '../util/jwt'
 @JsonController('/auth')
 export default class {
     @Post('/token')
-    async login(@Body() { email, password }: User) {
+    async login(@Body() { email, password }: LoginUser) {
         const token = await getToken({ email, password })
         if (!token) throw new UnauthorizedError()
 
@@ -26,12 +27,12 @@ export default class {
 
     @Post('/register/user')
     async register(@Body() user: User) {
-        const { password, email } = user
+        const { email } = user
 
         const exists = await userExists(email)
         if (exists) throw new UserConflictError()
 
-        const created = await register({ password, email })
+        const created = await register(user)
         if (!created) throw new BadRequestError('there was an issue creating this user')
 
         return { token: await encodeToken({ email }) }

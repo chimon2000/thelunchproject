@@ -5,7 +5,10 @@ import { OneToOne, JoinColumn, Column, Entity, PrimaryGeneratedColumn } from 'ty
 export class UserMetadata {
     @PrimaryGeneratedColumn('uuid') id: string
 
-    @Column('json') info
+    @Column() firstName: string
+    @Column() lastName: string
+
+    @Column('json') additional
 
     @OneToOne(() => User, user => user.metadata)
     @JoinColumn()
